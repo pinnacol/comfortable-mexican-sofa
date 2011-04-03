@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     resources :sites
     resources :layouts
     resources :snippets
+    resources :seeds
     resources :uploads, :only => [:create, :destroy]
   end
   
