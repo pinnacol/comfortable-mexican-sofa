@@ -23,6 +23,7 @@ class CmsSnippetTest < ActiveSupport::TestCase
   def test_load_from_file
     assert !CmsSnippet.load_from_file(cms_sites(:default), 'default')
     
+    ComfortableMexicanSofa.configuration.enable_seed_rendering = true
     ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     
     assert !CmsSnippet.load_from_file(cms_sites(:default), 'bogus')
@@ -33,6 +34,7 @@ class CmsSnippetTest < ActiveSupport::TestCase
   end
   
   def test_load_from_file_broken
+    ComfortableMexicanSofa.configuration.enable_seed_rendering = true
     ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     error_message = "Failed to load from #{ComfortableMexicanSofa.configuration.seed_data_path}/test.host/snippets/broken.yml"
     assert_exception_raised RuntimeError, error_message do
@@ -45,6 +47,7 @@ class CmsSnippetTest < ActiveSupport::TestCase
     assert !snippet.new_record?
     db_content = snippet.content
     
+    ComfortableMexicanSofa.configuration.enable_seed_rendering = true
     ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     assert snippet = CmsSnippet.load_for_slug!(cms_sites(:default), 'default')
     assert snippet.new_record?
@@ -58,6 +61,7 @@ class CmsSnippetTest < ActiveSupport::TestCase
     end
     assert !CmsSnippet.load_for_slug(cms_sites(:default), 'not_found')
     
+    ComfortableMexicanSofa.configuration.enable_seed_rendering = true
     ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     assert_exception_raised ActiveRecord::RecordNotFound, 'CmsSnippet with slug: not_found cannot be found' do
       CmsSnippet.load_for_slug!(cms_sites(:default), 'not_found')

@@ -40,7 +40,7 @@ class CmsSnippet < ActiveRecord::Base
   # Wrapper around load_from_file and find_by_slug
   # returns layout object if loaded / found
   def self.load_for_slug!(site, slug)
-    if ComfortableMexicanSofa.configuration.seed_data_path
+    if ComfortableMexicanSofa.configuration.load_from_seeds?
       load_from_file(site, slug)
     else
       # FIX: This a bit odd... Snippet is used as a tag, so sometimes there's no site scope

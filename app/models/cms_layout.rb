@@ -62,7 +62,7 @@ class CmsLayout < ActiveRecord::Base
   # Wrapper around load_from_file and find_by_slug
   # returns layout object if loaded / found
   def self.load_for_slug!(site, slug)
-    if ComfortableMexicanSofa.configuration.seed_data_path
+    if ComfortableMexicanSofa.configuration.load_from_seeds?
       load_from_file(site, slug)
     else
       site.cms_layouts.find_by_slug(slug)

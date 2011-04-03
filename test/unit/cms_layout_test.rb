@@ -87,6 +87,7 @@ class CmsLayoutTest < ActiveSupport::TestCase
   def test_load_from_file
     assert !CmsLayout.load_from_file(cms_sites(:default), 'default')
     
+    ComfortableMexicanSofa.configuration.enable_seed_rendering = true
     ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     
     assert !CmsLayout.load_from_file(cms_sites(:default), 'bogus')
@@ -102,6 +103,7 @@ class CmsLayoutTest < ActiveSupport::TestCase
   end
   
   def test_load_from_file_broken
+    ComfortableMexicanSofa.configuration.enable_seed_rendering = true
     ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     error_message = "Failed to load from #{ComfortableMexicanSofa.configuration.seed_data_path}/test.host/layouts/broken.yml"
     assert_exception_raised RuntimeError, error_message do
@@ -114,6 +116,7 @@ class CmsLayoutTest < ActiveSupport::TestCase
     assert !layout.new_record?
     db_content = layout.content
     
+    ComfortableMexicanSofa.configuration.enable_seed_rendering = true
     ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     assert layout = CmsLayout.load_for_slug!(cms_sites(:default), 'default')
     assert layout.new_record?
@@ -127,6 +130,7 @@ class CmsLayoutTest < ActiveSupport::TestCase
     end
     assert !CmsLayout.load_for_slug(cms_sites(:default), 'not_found')
     
+    ComfortableMexicanSofa.configuration.enable_seed_rendering = true
     ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     assert_exception_raised ActiveRecord::RecordNotFound, 'CmsLayout with slug: not_found cannot be found' do
       CmsLayout.load_for_slug!(cms_sites(:default), 'not_found')

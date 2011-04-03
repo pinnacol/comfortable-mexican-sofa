@@ -155,6 +155,7 @@ class CmsPageTest < ActiveSupport::TestCase
   def test_load_from_file
     assert !CmsPage.load_from_file(cms_sites(:default), '/')
     
+    ComfortableMexicanSofa.configuration.enable_seed_rendering = true
     ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     
     assert !CmsPage.load_from_file(cms_sites(:default), '/bogus')
@@ -178,6 +179,7 @@ class CmsPageTest < ActiveSupport::TestCase
   end
   
   def test_load_from_file_broken
+    ComfortableMexicanSofa.configuration.enable_seed_rendering = true
     ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     error_message = "Failed to load from #{ComfortableMexicanSofa.configuration.seed_data_path}/test.host/pages/broken.yml"
     assert_exception_raised RuntimeError, error_message do
@@ -190,6 +192,7 @@ class CmsPageTest < ActiveSupport::TestCase
     assert !page.new_record?
     db_content = page.content
     
+    ComfortableMexicanSofa.configuration.enable_seed_rendering = true
     ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     assert page = CmsPage.load_for_full_path!(cms_sites(:default), '/')
     assert page.new_record?
@@ -203,6 +206,7 @@ class CmsPageTest < ActiveSupport::TestCase
     end
     assert !CmsPage.load_for_full_path(cms_sites(:default), '/invalid_page')
     
+    ComfortableMexicanSofa.configuration.enable_seed_rendering = true
     ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     assert_exception_raised ActiveRecord::RecordNotFound, 'CmsPage with path: /invalid_page cannot be found' do
       CmsPage.load_for_full_path!(cms_sites(:default), '/invalid_page')

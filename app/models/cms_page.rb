@@ -74,7 +74,7 @@ class CmsPage < ActiveRecord::Base
   # Wrapper around load_from_file and find_by_full_path
   # returns page object if loaded / found
   def self.load_for_full_path!(site, path)
-    if ComfortableMexicanSofa.configuration.seed_data_path
+    if ComfortableMexicanSofa.configuration.load_from_seeds?
       load_from_file(site, path)
     else
       site.cms_pages.find_by_full_path(path)

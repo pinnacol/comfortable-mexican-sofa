@@ -6,9 +6,14 @@ class ComfortableMexicanSofa::Configuration
   # Module that will handle authentication to access cms-admin area
   attr_accessor :authentication
   
-  # Location of YAML files that can be used to render pages instead of pulling
-  # data from the database. Not active if not specified.
+  # Location of YAML files where seed data will be saved. The seed
+  # manager functionality is not active if this is not specified or
+  # does not exist.
   attr_accessor :seed_data_path
+  
+  # Used to determine whether or not the data from the seed_data_path
+  # should be used when rendering pages.
+  attr_accessor :enable_seed_rendering
   
   # Default url to access admin area is http://yourhost/cms-admin/ 
   # You can change 'cms-admin' to 'admin', for example.
@@ -35,16 +40,20 @@ class ComfortableMexicanSofa::Configuration
   
   # Configuration defaults
   def initialize
-    @cms_title            = 'ComfortableMexicanSofa MicroCMS'
-    @authentication       = 'ComfortableMexicanSofa::HttpAuth'
-    @seed_data_path       = nil
-    @admin_route_prefix   = 'cms-admin'
-    @admin_route_redirect = "/#{@admin_route_prefix}/pages"
-    @auto_manage_sites    = true
-    @disable_irb          = true
-    @enable_caching       = true
-    @upload_file_options  = {}
-    @override_host        = nil
+    @cms_title              = 'ComfortableMexicanSofa MicroCMS'
+    @authentication         = 'ComfortableMexicanSofa::HttpAuth'
+    @seed_data_path         = nil
+    @enable_seed_rendering  = false
+    @admin_route_prefix     = 'cms-admin'
+    @admin_route_redirect   = "/#{@admin_route_prefix}/pages"
+    @auto_manage_sites      = true
+    @disable_irb            = true
+    @enable_caching         = true
+    @upload_file_options    = {}
+    @override_host          = nil
   end
   
+  def load_from_seeds?
+    enable_seed_rendering && seed_data_path
+  end
 end
