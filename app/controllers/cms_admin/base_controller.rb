@@ -32,4 +32,9 @@ protected
       return redirect_to(cms_admin_sites_path)
     end
   end
+
+  def seed_manager_enabled?
+    File.directory?(ComfortableMexicanSofa.config.seed_data_path.to_s)
+  end
+  helper_method :seed_manager_enabled?
 end

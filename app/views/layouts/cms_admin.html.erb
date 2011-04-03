@@ -24,6 +24,7 @@
           <%= active_link_to 'Layouts', cms_admin_layouts_path %>
           <%= active_link_to 'Pages', cms_admin_pages_path %>
           <%= active_link_to 'Snippets', cms_admin_snippets_path %>
+          <%= active_link_to('Seeds', cms_admin_seeds_path) if seed_manager_enabled? %>
           <%= cms_hook :navigation %>
         </div>
       </div>
