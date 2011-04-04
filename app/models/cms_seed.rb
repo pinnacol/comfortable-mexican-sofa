@@ -8,11 +8,22 @@ class CmsSeed
   include ActiveModel::Serialization
   include ActiveModel::Conversion
 
+  class CmsSeedError          < StandardError; end
   class UnknownAttributeError < NoMethodError; end
+  class SeedNotFound          < CmsSeedError; end
+  class RecordInvalid         < CmsSeedError; end
+  class RecordInvalid         < CmsSeedError
+    attr_reader :record
+    def initialize(record)
+      @record = record
+      errors = @record.errors.full_messages.join(", ")
+    end
+  end
 
   attr_accessor   :name, :path
 
-  validates_presence_of :name, :path
+  validates_presence_of :name
+  validate              :uniqueness_of_name
 
   def self.all
     begin
@@ -25,12 +36,16 @@ class CmsSeed
     end
   end
 
+  def self.count
+    all.size
+  end
+
   def self.find(name)
     dir = root_path.join(name)
     if dir.directory?
       new(:name => dir.basename.to_s, :path => dir)
     else
-      nil
+      raise SeedNotFound
     end
   end
 
@@ -59,12 +74,27 @@ class CmsSeed
     end
   end
 
+  def destroy
+    path.rmtree
+  end
+
   def id
-    name.to_s.sub('.', '|')
+    new_record? ? nil : name.to_s.sub('.', '|')
+  end
+
+  def new_record?
+    name.blank?
   end
 
   def persisted?
-    true
+    !new_record?
+  end
+
+  def save!
+    if valid?
+    else
+      raise RecordInvalid.new(self)
+    end
   end
 
   def to_zip_io
@@ -81,6 +111,13 @@ class CmsSeed
     @zipfile
   end
 
+  def update_attributes!(attributes)
+    if valid?
+    else
+      raise RecordInvalid.new(self)
+    end
+  end
+
   def zip_cleanup
     if @zipfile
       @zipfile.close
@@ -91,4 +128,10 @@ class CmsSeed
   def zip_file_name
     "#{name}.zip"
   end
+
+  private
+    def uniqueness_of_name
+      
+    end
+  # end private
 end

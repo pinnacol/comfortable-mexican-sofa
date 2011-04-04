@@ -9,6 +9,7 @@ ComfortableMexicanSofa.configure do |config|
   # Default url to access admin area is http://yourhost/cms-admin/ 
   # You can change 'cms-admin' to 'admin', for example.
   #   config.admin_route_prefix = 'cms-admin'
+  # config.admin_route_prefix = 'admin/cms'
   
   # Path: /cms-admin redirects to /cms-admin/pages but you can change it
   # You don't need to change it when changing admin_route_prefix
@@ -18,6 +19,7 @@ ComfortableMexicanSofa.configure do |config|
   # data from the database. Not active if not specified. Containing folder name
   # should be the hostname of the site. Example: my-app.local
   #   config.seed_data_path = File.expand_path('db/cms_seeds', Rails.root)
+  config.seed_data_path = File.expand_path('db/cms_seeds', Rails.root)
   
   # Let CMS handle site creation and management. Enabled by default.
   #   config.auto_manage_sites = true
