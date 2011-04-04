@@ -1,7 +1,7 @@
 class CmsAdmin::SeedsController < CmsAdmin::BaseController
 
   before_filter :build_cms_seed, :only => [:new, :create]
-  before_filter :load_cms_seed,  :only => [:edit, :update, :destroy, :download]
+  before_filter :load_cms_seed,  :only => [:edit, :update, :destroy, :download, :import]
 
   def index
     if ComfortableMexicanSofa.configuration.seed_data_path
@@ -49,6 +49,17 @@ class CmsAdmin::SeedsController < CmsAdmin::BaseController
     @cms_seed.zip_cleanup
   end
 
+  def import
+    if request.put?
+      if @cms_seed.import
+        flash[:notice] = 'Seed imported'
+        redirect_to(:action => :index)
+      else
+        flash[:error] = 'Seed could not be imported'
+      end
+    end
+  end
+
 protected
 
   def build_cms_seed
@@ -58,6 +69,7 @@ protected
 
   def load_cms_seed
     @cms_seed = CmsSeed.from_param(params[:id])
+    @cms_seed.attributes = params[:cms_seed]
   rescue CmsSeed::SeedNotFound
     flash[:error] = 'Seed not found'
     redirect_to :action => :index

@@ -92,6 +92,14 @@ class CmsSeed
     new_record? ? nil : name.to_s.sub('.', '|')
   end
 
+  def import
+    if site
+      import_seed
+    end
+
+    errors.empty?
+  end
+
   def new_record?
     @new_record
   end
@@ -174,6 +182,15 @@ private
     end
 
     errors.empty?
+  end
+
+  def import_seed
+    begin
+      Rails.logger.debug("cd #{Rails.root} && rake comfortable_mexican_sofa:import:all FROM=#{name} TO=#{site.hostname} SEED_PATH=#{self.class.root_path}")
+      `cd #{Rails.root} && rake comfortable_mexican_sofa:import:all FROM=#{name} TO=#{site.hostname} SEED_PATH=#{self.class.root_path}`
+    rescue
+      errors.add(:site_id, "could not be imported")
+    end
   end
 
   def is_zip_file

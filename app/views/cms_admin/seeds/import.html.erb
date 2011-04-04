@@ -1,0 +1,6 @@
+<h1>Import Seed: <%= @cms_seed.name %></h1>
+
+<%= cms_form_for @cms_seed, :url => {:action => :import} do |form| %>
+  <%= form.select :site_id, options_from_collection_for_select(CmsSite.all, "id", "label"), :include_blank => true, :label => "Import Site" %>
+  <%= form.submit 'Import Seed' %>
+<% end %>

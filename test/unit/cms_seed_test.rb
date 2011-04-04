@@ -120,5 +120,15 @@ class CmsSeedTest < ActiveSupport::TestCase
       assert !seed.uploading?
       assert seed.save
     end
+    seed.destroy
+  end
+
+  def test_import_site
+    seed = cms_seeds(:test)
+    seed.site_id = cms_sites(:default).id
+    assert seed.site
+    # Importing currently causes the test suite to hang
+    # TODO Figure out how to test the import method
+    # assert seed.import
   end
 end

@@ -18,6 +18,9 @@ Rails.application.routes.draw do
       member do
         get :download
         get :import
+        put :import
+        get :duplicate
+        put :duplicate
       end
     end
     resources :uploads, :only => [:create, :destroy]
