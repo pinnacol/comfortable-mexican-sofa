@@ -20,7 +20,7 @@ class CmsSeed
     end
   end
 
-  attr_accessor   :name, :path
+  attr_accessor   :name, :path, :zip_file
 
   validates_presence_of :name
   validate              :uniqueness_of_name
@@ -88,6 +88,10 @@ class CmsSeed
 
   def persisted?
     !new_record?
+  end
+
+  def reload
+    self.class.from_param(self)
   end
 
   def save!
