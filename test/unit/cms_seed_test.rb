@@ -104,4 +104,10 @@ class CmsSeedTest < ActiveSupport::TestCase
       seed.destroy
     end
   end
+
+  def test_associated_site
+    seed = cms_seeds(:default)
+    seed.site_id = cms_sites(:default).id
+    assert_equal cms_sites(:default), seed.site
+  end
 end

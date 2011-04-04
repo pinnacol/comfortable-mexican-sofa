@@ -112,6 +112,10 @@ class CmsSeed
     self.class.from_param(self)
   end
 
+  def site
+    site_id.present? ? CmsSite.find(site_id) : nil
+  end
+
   def save
     if valid?
       export_site if exporting?
