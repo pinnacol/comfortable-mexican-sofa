@@ -14,7 +14,12 @@ Rails.application.routes.draw do
     resources :sites
     resources :layouts
     resources :snippets
-    resources :seeds
+    resources :seeds do
+      member do
+        get :download
+        get :import
+      end
+    end
     resources :uploads, :only => [:create, :destroy]
   end
   

@@ -1,0 +1,6 @@
+<%= link_to span_tag('Create New Seed'), new_cms_admin_seed_path, :class => 'big button' %>
+<h1>Seeds</h1>
+
+<ul class='list'>
+  <%= render :partial => 'index_branch', :collection => @cms_seeds %>
+</ul>
