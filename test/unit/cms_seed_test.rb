@@ -110,4 +110,15 @@ class CmsSeedTest < ActiveSupport::TestCase
     seed.site_id = cms_sites(:default).id
     assert_equal cms_sites(:default), seed.site
   end
+
+  def test_export_site
+    seed = cms_seeds(:export)
+    seed.destroy unless seed.new_record?
+    assert_difference 'CmsSeed.count' do
+      seed.site_id = cms_sites(:default).id
+      seed.exporting = true
+      assert !seed.uploading?
+      assert seed.save
+    end
+  end
 end

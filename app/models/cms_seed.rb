@@ -151,7 +151,7 @@ class CmsSeed
   end
 
   def uploading?
-    @uploading || true
+    !exporting?
   end
 
   def zip_cleanup
@@ -167,7 +167,13 @@ class CmsSeed
 
 private
   def export_site
-    $stderr.puts(" => Exporting site...")
+    begin
+      `cd #{Rails.root} && rake comfortable_mexican_sofa:export:all FROM=#{site.hostname} TO=#{name} SEED_PATH=#{self.class.root_path}`
+    rescue
+      errors.add(:site_id, "could not be exported")
+    end
+
+    errors.empty?
   end
 
   def is_zip_file

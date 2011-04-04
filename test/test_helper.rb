@@ -30,8 +30,9 @@ class ActiveSupport::TestCase
   
   def cms_seeds(key)
     { 
-      :default => CmsSeed.new({ :name => "default.host" }),
-      :test    => CmsSeed.find("test.host")
+      :default  => CmsSeed.new({ :name => "default.host" }),
+      :export   => CmsSeed.new({ :name => "default.export.host" }),
+      :test     => CmsSeed.find("test.host")
     }[key]
   end
   # Example usage:
