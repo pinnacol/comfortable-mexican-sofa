@@ -1,2 +1,8 @@
 <%= form.text_field :name %>
-<%= form.file_field :zip_file if @cms_seed.new_record? %>
+<% if @cms_seed.new_record? %>
+  <% if @cms_seed.uploading? %>
+    <%= form.file_field :zip_file %>
+  <% elsif @cms_seed.exporting? %>
+    <%= form.select :site_id, options_from_collection_for_select(CmsSite.all, "id", "label"), :include_blank => true %>
+  <% end %>
+<% end %>

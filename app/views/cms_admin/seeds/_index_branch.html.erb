@@ -4,14 +4,15 @@
   <div class='item'>
     <div class='icon'></div>
     <div class='action_links'>
-      <%= link_to 'Import',   import_cms_admin_seed_path(cms_seed) %>
-      <%= link_to 'Download', download_cms_admin_seed_path(cms_seed) %>
-      <%= link_to 'Delete',   cms_admin_seed_path(cms_seed), :method => :delete, :confirm => 'Are you sure?' %>
+      <%= link_to 'Duplicate',  duplicate_cms_admin_seed_path(cms_seed) %>
+      <%= link_to 'Import',     import_cms_admin_seed_path(cms_seed) %>
+      <%= link_to 'Download',   download_cms_admin_seed_path(cms_seed) %>
+      <%= link_to 'Delete',     cms_admin_seed_path(cms_seed), :method => :delete, :confirm => 'Are you sure?' %>
     </div>
     <div class='label'>
       <%= link_to cms_seed.name, edit_cms_admin_seed_path(cms_seed) %>
       <div class='sublabel'>
-        <%# link_to cms_layout.slug, edit_cms_admin_layout_path(cms_layout) %>
+        <%= cms_seed.relative_path %>
       </div>
     </div>
   </div>

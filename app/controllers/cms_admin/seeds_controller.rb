@@ -15,6 +15,11 @@ class CmsAdmin::SeedsController < CmsAdmin::BaseController
   end
 
   def new
+    if params[:export]
+      @cms_seed.exporting = true
+    else
+      @cms_seed.uploading = true
+    end
   end
 
   def create

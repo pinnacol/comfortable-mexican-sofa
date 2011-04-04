@@ -1,14 +1,12 @@
 require File.expand_path('../../test_helper', File.dirname(__FILE__))
 
 class CmsAdmin::SeedsControllerTest < ActionController::TestCase
-  def cms_seeds(key)
-    { 
-      :default => CmsSeed.new({ :name => "default.host" })
-    }[key]
+  def setup
+    super
+    ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../../cms_seeds', File.dirname(__FILE__))
   end
 
   def test_get_index
-    ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../../cms_seeds', File.dirname(__FILE__))
     get :index
     assert_response :success
     assert assigns(:cms_seeds)
@@ -22,14 +20,12 @@ class CmsAdmin::SeedsControllerTest < ActionController::TestCase
   end
 
   def test_get_new
-    ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../../cms_seeds', File.dirname(__FILE__))
     get :new
     assert_response :success
     assert assigns(:cms_seed)
   end
 
   def test_get_edit
-    ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../../cms_seeds', File.dirname(__FILE__))
     get :edit, :id => "test|host"
     assert_response :success
     assert assigns(:cms_seed)

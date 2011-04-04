@@ -4,6 +4,8 @@ class CmsSeedTest < ActiveSupport::TestCase
   include ActiveModel::Lint::Tests
 
   def setup
+    super
+    ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     @model = CmsSeed.new
   end
 
@@ -12,52 +14,47 @@ class CmsSeedTest < ActiveSupport::TestCase
   end
 
   def test_all
-    ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     seeds = CmsSeed.all
     assert "test.local", seeds.first.name
   end
 
   def test_id
-    seed = CmsSeed.new(:name => 'test.host', :path => '')
+    seed = cms_seeds(:test)
     assert "test|local", seed.id
   end
 
   def test_find
-    ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
-    seed = CmsSeed.find("test.host")
+    seed = cms_seeds(:test)
     assert seed.is_a?(CmsSeed)
     assert "test.host", seed.name
   end
 
   def test_find_bogus
-    ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     assert_exception_raised CmsSeed::SeedNotFound do
       CmsSeed.find("test.bogus")
     end
   end
 
   def test_from_param
-    ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
     seed = CmsSeed.from_param("test|host")
     assert seed.is_a?(CmsSeed)
     assert "test.host", seed.name
   end
 
   def test_path
-    ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
-    seed = CmsSeed.find("test.host")
+    seed = cms_seeds(:test)
     assert seed.path.is_a?(Pathname)
+    assert_equal ComfortableMexicanSofa.configuration.seed_data_path + "/test.host", seed.path.to_s
+    assert_equal "test.host", seed.path.basename.to_s
   end
 
   def test_zip_file_name
-    ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
-    seed = CmsSeed.find("test.host")
+    seed = cms_seeds(:test)
     assert "test.host.zip", seed.zip_file_name
   end
 
   def test_to_zip_io
-    ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
-    seed  = CmsSeed.find("test.host")
+    seed = cms_seeds(:test)
     file  = seed.to_zip_io
 
     assert file.is_a?(Tempfile)
@@ -65,15 +62,46 @@ class CmsSeedTest < ActiveSupport::TestCase
     seed.zip_cleanup
   end
 
-  def test_count
-    assert_equal 2, CmsSeed.count
+  def test_create
+    assert_difference 'CmsSeed.count' do
+      seed = CmsSeed.new(
+        :name     => "test.host.create",
+        :zip_file => fixture_file_upload('files/test.host.zip')
+      )
+      assert seed.save
+    end
   end
 
-  # def test_destroy
-  #   ComfortableMexicanSofa.configuration.seed_data_path = File.expand_path('../cms_seeds', File.dirname(__FILE__))
-  #   assert_difference 'CmsSeed.count', -1 do
-  #     seed = CmsSeed.find("test.model.create")
-  #     seed.destroy
-  #   end
-  # end
+  def test_create_without_zip
+    assert_no_difference 'CmsSeed.count' do
+      seed = CmsSeed.new(:name => "test.host.create")
+      assert !seed.save
+      assert seed.errors.present?
+      assert_has_errors_on seed, [:zip_file]
+    end
+  end
+
+  def test_create_with_taken_path
+    assert_no_difference 'CmsSeed.count' do
+      seed = CmsSeed.new(:name => "test.host")
+      assert !seed.save
+      assert seed.errors.present?
+      assert_has_errors_on seed, [:name]
+      assert_match /exists/, seed.errors[:name].to_s
+    end
+  end
+
+  def test_update_with_taken_path
+    seed = cms_seeds(:default)
+    assert_exception_raised CmsSeed::RecordInvalid do
+      seed.update_attributes!(:name => "test.host")
+    end
+  end
+
+  def test_destroy
+    assert_difference 'CmsSeed.count', -1 do
+      seed = CmsSeed.find("test.host.create")
+      seed.destroy
+    end
+  end
 end

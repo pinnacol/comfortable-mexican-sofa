@@ -4,6 +4,7 @@ require 'zip/zip'
 
 class CmsSeed
   extend ActiveModel::Naming
+  extend ActiveModel::Callbacks
   include ActiveModel::Validations
   include ActiveModel::Serialization
   include ActiveModel::Conversion
@@ -20,16 +21,20 @@ class CmsSeed
     end
   end
 
-  attr_accessor   :name, :path, :zip_file
+  attr_accessor   :name, :site_id, :zip_file
+  attr_accessor   :exporting, :uploading
 
   validates_presence_of :name
-  validate              :uniqueness_of_name
+  validates_presence_of :site_id,     :if => :exporting?
+  validates_presence_of :zip_file,    :if => :uploading?
+  validate              :is_zip_file, :if => :uploading?
+  validate              :uniqueness_of_path
 
   def self.all
     begin
       seeds = []
       root_path.children.each do |dir|
-        seeds << new(:name => dir.basename, :path => dir) if dir.directory?
+        seeds << new(:name => dir.basename) if dir.directory?
       end
     ensure
       return seeds
@@ -43,7 +48,7 @@ class CmsSeed
   def self.find(name)
     dir = root_path.join(name)
     if dir.directory?
-      new(:name => dir.basename.to_s, :path => dir)
+      new(:name => dir.basename.to_s)
     else
       raise SeedNotFound
     end
@@ -59,6 +64,7 @@ class CmsSeed
 
   def initialize(attributes = nil)
     self.attributes = attributes unless attributes.nil?
+    @new_record     = !(self.path.directory? && self.path.to_s != self.class.root_path.to_s)
   end
 
   def attributes=(new_attributes)
@@ -78,27 +84,45 @@ class CmsSeed
     path.rmtree
   end
 
+  def exporting?
+    @exporting || false
+  end
+
   def id
     new_record? ? nil : name.to_s.sub('.', '|')
   end
 
   def new_record?
-    name.blank?
+    @new_record
+  end
+
+  def path
+    self.class.root_path.join(self.name.to_s)
   end
 
   def persisted?
     !new_record?
   end
 
+  def relative_path
+    path.to_s.sub(Rails.root.to_s + '/', '')
+  end
+
   def reload
     self.class.from_param(self)
   end
 
-  def save!
+  def save
     if valid?
-    else
-      raise RecordInvalid.new(self)
+      export_site if exporting?
+      unzip_seed  if uploading?
     end
+
+    errors.empty?
+  end
+
+  def save!
+    save ? self : raise(RecordInvalid.new(self))
   end
 
   def to_zip_io
@@ -106,7 +130,7 @@ class CmsSeed
     Zip::ZipOutputStream.open(@zipfile.path) do |zip|
       Find.find(path.to_s) do |item|
         next if File.directory?(item)
-        file = item.sub(path.join("..").to_s + "/", "")
+        file = item.sub(path.to_s + "/", "")
         zip.put_next_entry(file)
         zip.write(IO.read(item))
       end
@@ -122,6 +146,10 @@ class CmsSeed
     end
   end
 
+  def uploading?
+    @uploading || true
+  end
+
   def zip_cleanup
     if @zipfile
       @zipfile.close
@@ -133,9 +161,31 @@ class CmsSeed
     "#{name}.zip"
   end
 
-  private
-    def uniqueness_of_name
-      
+private
+  def export_site
+    $stderr.puts(" => Exporting site...")
+  end
+
+  def is_zip_file
+    if zip_file.present? && zip_file.original_filename !~ /\.zip$/
+      errors.add(:zip_file, "must be a zip file")
     end
-  # end private
+  end
+
+  def uniqueness_of_path
+    if path.directory?
+      errors.add(:name, "already exists")
+    end
+  end
+
+  def unzip_seed
+    uploaded_file = zip_file.respond_to?(:path) ? zip_file : zip_file.tempfile
+    Zip::ZipFile.open(uploaded_file.path) do |zip|
+      zip.each do |file|
+        final_path = path.join(file.name)
+        FileUtils.mkdir_p(File.dirname(final_path))
+        zip.extract(file, final_path) unless File.exists?(final_path)
+      end
+    end
+  end
 end

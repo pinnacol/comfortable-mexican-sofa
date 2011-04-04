@@ -1,6 +1,6 @@
 <h1>New Seed</h1>
 
-<%= cms_form_for @cms_seed, :url => {:action => :create} do |form| %>
+<%= cms_form_for @cms_seed, :url => {:action => :create}, :html => { :multipart => true } do |form| %>
   <%= render :partial => 'form', :object => form %>
   <%= form.simple_field nil, nil, :class => 'submit_element' do %>
     <%= form.submit 'Create Seed', :disable_builder => true %>
