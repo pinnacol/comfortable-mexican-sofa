@@ -1,6 +1,7 @@
 class CmsAdmin::SitesController < CmsAdmin::BaseController
 
-  skip_before_filter :load_admin_cms_site
+  skip_before_filter  :load_admin_cms_site,
+                      :load_fixtures
 
   before_filter :build_cms_site,  :only => [:new, :create]
   before_filter :load_cms_site,   :only => [:edit, :update, :destroy]
@@ -21,7 +22,7 @@ class CmsAdmin::SitesController < CmsAdmin::BaseController
   def create
     @cms_site.save!
     flash[:notice] = 'Site created'
-    redirect_to (params[:commit] ? {:action => :index} : {:action => :edit, :id => @cms_site})
+    redirect_to :action => :edit, :id => @cms_site
   rescue ActiveRecord::RecordInvalid
     flash.now[:error] = 'Failed to create site'
     render :action => :new
@@ -30,7 +31,7 @@ class CmsAdmin::SitesController < CmsAdmin::BaseController
   def update
     @cms_site.update_attributes!(params[:cms_site])
     flash[:notice] = 'Site updated'
-    redirect_to (params[:commit] ? {:action => :index} : {:action => :edit, :id => @cms_site})
+    redirect_to :action => :edit, :id => @cms_site
   rescue ActiveRecord::RecordInvalid
     flash.now[:error] = 'Failed to update site'
     render :action => :edit

@@ -16,7 +16,7 @@ class ComfortableMexicanSofa::FormBuilder < ActionView::Helpers::FormBuilder
   end
   
   def default_field(type, field, options = {}, &block)
-    errors = if object.errors[field].present?
+    errors = if object.respond_to?(:errors) && object.errors[field].present?
       "<div class='errors'>#{[object.errors[field]].flatten.first}</div>"
     end
     if desc = options.delete(:desc)
@@ -56,7 +56,7 @@ class ComfortableMexicanSofa::FormBuilder < ActionView::Helpers::FormBuilder
   # -- Tag Field Fields -----------------------------------------------------
   def default_tag_field(tag, options = {})
     label     = options[:label] || tag.label.to_s.titleize
-    css_class = options[:css_class] || tag.class.name.underscore.downcase.idify
+    css_class = options[:css_class] || tag.class.to_s.demodulize.underscore
     
     field_css_class = case tag
     when ComfortableMexicanSofa::Tag::PageRichText

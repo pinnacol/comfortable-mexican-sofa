@@ -2,10 +2,12 @@ class Cms::Page < ActiveRecord::Base
   
   set_table_name :cms_pages
   
-  # -- AR Extensions --------------------------------------------------------
   acts_as_tree :counter_cache => :children_count
+  is_mirrored
+  has_revisions_for :blocks_attributes
   
-  attr_accessor :tags
+  attr_accessor :tags,
+                :blocks_attributes_changed
   
   # -- Relationships --------------------------------------------------------
   belongs_to :site
@@ -17,7 +19,8 @@ class Cms::Page < ActiveRecord::Base
     :autosave   => true
   
   # -- Callbacks ------------------------------------------------------------
-  before_validation :assign_parent,
+  before_validation :assigns_label,
+                    :assign_parent,
                     :assign_full_path
   before_validation :assign_position,
                     :on => :create
@@ -32,7 +35,7 @@ class Cms::Page < ActiveRecord::Base
   validates :slug,
     :presence   => true,
     :format     => /^\w[a-z0-9_-]*$/i,
-    :unless     => lambda{ |p| p == Cms::Page.root || p.site && p.site.pages.count == 0 }
+    :unless     => lambda{ |p| p.site && (p.site.pages.count == 0 || p.site.pages.root == self) }
   validates :layout,
     :presence   => true
   validates :full_path,
@@ -64,12 +67,12 @@ class Cms::Page < ActiveRecord::Base
   
   # Transforms existing cms_block information into a hash that can be used
   # during form processing. That's the only way to modify cms_blocks.
-  def blocks_attributes
-    self.blocks.inject([]) do |arr, block|
+  def blocks_attributes(was = false)
+    self.blocks.collect do |block|
       block_attr = {}
       block_attr[:label]    = block.label
-      block_attr[:content]  = block.content
-      arr << block_attr
+      block_attr[:content]  = was ? block.content_was : block.content
+      block_attr
     end
   end
   
@@ -83,6 +86,7 @@ class Cms::Page < ActiveRecord::Base
       block_hash.symbolize_keys! unless block_hash.is_a?(HashWithIndifferentAccess)
       block = self.blocks.detect{|b| b.label == block_hash[:label]} || self.blocks.build(:label => block_hash[:label])
       block.content = block_hash[:content]
+      self.blocks_attributes_changed = self.blocks_attributes_changed || block.content_changed?
     end
   end
   
@@ -109,7 +113,16 @@ class Cms::Page < ActiveRecord::Base
     "http://#{self.site.hostname}#{self.full_path}"
   end
   
+  # Method to collect prevous state of blocks for revisions
+  def blocks_attributes_was
+    blocks_attributes(true)
+  end
+  
 protected
+  
+  def assigns_label
+    self.label = self.label.blank?? self.slug.try(:titleize) : self.label
+  end
   
   def assign_parent
     return unless site

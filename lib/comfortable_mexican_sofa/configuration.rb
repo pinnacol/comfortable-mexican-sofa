@@ -21,6 +21,9 @@ class ComfortableMexicanSofa::Configuration
   # Are you running multiple sites from single install? Default assumption is 'No'
   attr_accessor :enable_multiple_sites
   
+  # All resources across sites are kept in sync
+  attr_accessor :enable_mirror_sites
+  
   # Not allowing irb code to be run inside page content. False by default.
   attr_accessor :allow_irb
   
@@ -37,20 +40,25 @@ class ComfortableMexicanSofa::Configuration
   # Path where fixtures can be located.
   attr_accessor :fixtures_path
   
+  # Number of revisions kept. Default is 25. If you wish to disable: set this to 0.
+  attr_accessor :revisions_limit
+  
   # Configuration defaults
   def initialize
     @cms_title              = 'ComfortableMexicanSofa MicroCMS'
     @authentication         = 'ComfortableMexicanSofa::HttpAuth'
     @seed_data_path         = nil
     @admin_route_prefix     = 'cms-admin'
+    @admin_route_redirect   = 'pages'
     @content_route_prefix   = ''
-    @admin_route_redirect   = "/#{@admin_route_prefix}/pages"
     @enable_multiple_sites  = false
+    @enable_mirror_sites    = false
     @allow_irb              = false
     @enable_caching         = true
     @upload_file_options    = {}
     @enable_fixtures        = false
     @fixtures_path          = File.expand_path('db/cms_fixtures', Rails.root)
+    @revisions_limit        = 25
   end
   
 end

@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   
   namespace :cms_admin, :path => ComfortableMexicanSofa.config.admin_route_prefix, :except => :show do
-    get '/' => redirect(ComfortableMexicanSofa.config.admin_route_redirect)
+    get '/' => redirect(
+      "/#{ComfortableMexicanSofa.config.admin_route_prefix}/#{ComfortableMexicanSofa.config.admin_route_redirect}"
+    )
     resources :pages do
       member do 
         match :form_blocks
@@ -10,12 +12,23 @@ Rails.application.routes.draw do
       collection do
         match :reorder
       end
+      resources :revisions, :only => [:index, :show, :revert] do
+        put :revert, :on => :member
+      end
     end
     resources :sites
-    resources :layouts
-    resources :snippets
     resources :uploads, :only => [:create, :destroy]
-  end
+    resources :layouts do
+      resources :revisions, :only => [:index, :show, :revert] do
+        put :revert, :on => :member
+      end
+    end
+    resources :snippets do 
+      resources :revisions, :only => [:index, :show, :revert] do
+        put :revert, :on => :member
+      end
+    end
+  end unless ComfortableMexicanSofa.config.admin_route_prefix.blank?
   
   scope :controller => :cms_content do
     prefix = ComfortableMexicanSofa.config.content_route_prefix

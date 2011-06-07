@@ -1,5 +1,6 @@
 class CmsGenerator < Rails::Generators::Base
   
+  require 'rails/generators/active_record'
   include Rails::Generators::Migration
   include Thor::Actions
   
@@ -22,9 +23,15 @@ class CmsGenerator < Rails::Generators::Base
   end
   
   def generate_public_assets
-    directory 'public/stylesheets/comfortable_mexican_sofa', 'public/stylesheets/comfortable_mexican_sofa'
-    directory 'public/javascripts/comfortable_mexican_sofa', 'public/javascripts/comfortable_mexican_sofa'
-    directory 'public/images/comfortable_mexican_sofa', 'public/images/comfortable_mexican_sofa'
+    return if ComfortableMexicanSofa.asset_pipeline_enabled?
+    directory 'app/assets/stylesheets/comfortable_mexican_sofa',  'public/stylesheets/comfortable_mexican_sofa'
+    directory 'app/assets/javascripts/comfortable_mexican_sofa',  'public/javascripts/comfortable_mexican_sofa'
+    directory 'app/assets/images/comfortable_mexican_sofa',       'public/images/comfortable_mexican_sofa'
+    
+    gsub_file 'public/stylesheets/comfortable_mexican_sofa/content.css',
+      '/assets/comfortable_mexican_sofa/', '/images/comfortable_mexican_sofa/'
+    gsub_file 'public/stylesheets/comfortable_mexican_sofa/widgets.css',
+      '/assets/comfortable_mexican_sofa/', '/images/comfortable_mexican_sofa/'
   end
   
   def generate_cms_seeds
@@ -36,9 +43,7 @@ class CmsGenerator < Rails::Generators::Base
   end
   
   def self.next_migration_number(dirname)
-    orm = Rails.configuration.generators.options[:rails][:orm]
-    require "rails/generators/#{orm}"
-    "#{orm.to_s.camelize}::Generators::Base".constantize.next_migration_number(dirname)
+    ActiveRecord::Generators::Base.next_migration_number(dirname)
   end
   
 end

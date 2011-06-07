@@ -18,12 +18,14 @@ class ActiveSupport::TestCase
       config.authentication         = 'ComfortableMexicanSofa::HttpAuth'
       config.admin_route_prefix     = 'cms-admin'
       config.content_route_prefix   = ''
-      config.admin_route_redirect   = "/cms-admin/pages"
+      config.admin_route_redirect   = 'pages'
       config.enable_multiple_sites  = false
+      config.enable_mirror_sites    = false
       config.allow_irb              = false
       config.enable_caching         = true
       config.enable_fixtures        = false
       config.fixtures_path          = File.expand_path('db/cms_fixtures', Rails.root)
+      config.revisions_limit        = 25
     end
     ComfortableMexicanSofa::HttpAuth.username = 'username'
     ComfortableMexicanSofa::HttpAuth.password = 'password'
@@ -35,7 +37,7 @@ class ActiveSupport::TestCase
   def assert_has_errors_on(record, fields)
     fields = [fields].flatten unless fields.is_a?(Hash)
     fields.each do |field, message|
-      assert record.errors.has_key?(field.to_sym), "#{record.class.name} should error on invalid #{field}"
+      assert record.errors.to_hash.has_key?(field.to_sym), "#{record.class.name} should error on invalid #{field}"
       if message && record.errors[field].is_a?(Array) && !message.is_a?(Array)
         assert_not_nil record.errors[field].index(message)
       elsif message

@@ -30,7 +30,7 @@ module ComfortableMexicanSofa::Tag
         tag = self.new
         tag.page    = page
         tag.label   = match[1]
-        tag.params  = match[2]
+        tag.params  = match[2].to_s.split(':')
         tag
       end
     end
@@ -82,6 +82,11 @@ module ComfortableMexicanSofa::Tag
     # Find or initialize Cms::Snippet object
     def snippet
       page.site.snippets.detect{|s| s.slug == self.label.to_s} || page.site.snippets.build(:slug => self.label.to_s)
+    end
+    
+    # Initializing Cms::Upload object
+    def upload
+      page.site.uploads.detect{|s| s.file_file_name == self.label.to_s}
     end
     
     # Checks if this tag is using Cms::Block

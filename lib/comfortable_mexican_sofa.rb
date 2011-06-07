@@ -4,6 +4,7 @@ unless defined? ComfortableMexicanSofa::Application
 end
 
 [ 'comfortable_mexican_sofa/version',
+  'comfortable_mexican_sofa/error',
   'comfortable_mexican_sofa/configuration',
   'comfortable_mexican_sofa/http_auth',
   'comfortable_mexican_sofa/rails_extensions',
@@ -12,6 +13,8 @@ end
   'comfortable_mexican_sofa/view_methods',
   'comfortable_mexican_sofa/form_builder',
   'comfortable_mexican_sofa/acts_as_tree',
+  'comfortable_mexican_sofa/has_revisions',
+  'comfortable_mexican_sofa/is_mirrored',
   'comfortable_mexican_sofa/tag',
   'comfortable_mexican_sofa/fixtures'
 ].each do |path|
@@ -39,6 +42,11 @@ module ComfortableMexicanSofa
       @configuration ||= Configuration.new
     end
     alias :config :configuration
+    
+    # Checking if Rails3.1+ asset pipeline is enabled
+    def asset_pipeline_enabled?
+      Rails::VERSION::MAJOR == 3 && Rails::VERSION::MINOR >= 1 && Rails.configuration.assets.enabled
+    end
     
   end
 end
