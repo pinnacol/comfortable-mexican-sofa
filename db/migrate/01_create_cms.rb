@@ -5,8 +5,12 @@ class CreateCms < ActiveRecord::Migration
     create_table :cms_sites do |t|
       t.string :label
       t.string :hostname
+      t.string :path
+      t.string :locale,       :null => false, :default => 'en'
+      t.boolean :is_mirrored, :null => false, :default => false
     end
     add_index :cms_sites, :hostname
+    add_index :cms_sites, :is_mirrored
     
     # -- Layouts ------------------------------------------------------------
     create_table :cms_layouts do |t|
@@ -18,7 +22,8 @@ class CreateCms < ActiveRecord::Migration
       t.text    :content
       t.text    :css
       t.text    :js
-      t.integer :position, :null => false, :default => 0
+      t.integer :position,  :null => false, :default => 0
+      t.boolean :is_shared, :null => false, :default => false
       t.timestamps
     end
     add_index :cms_layouts, [:parent_id, :position]
@@ -37,6 +42,7 @@ class CreateCms < ActiveRecord::Migration
       t.integer :position,        :null => false, :default => 0
       t.integer :children_count,  :null => false, :default => 0
       t.boolean :is_published,    :null => false, :default => true
+      t.boolean :is_shared,       :null => false, :default => false
       t.timestamps
     end
     add_index :cms_pages, [:site_id, :full_path]
@@ -57,6 +63,7 @@ class CreateCms < ActiveRecord::Migration
       t.string  :label
       t.string  :slug
       t.text    :content
+      t.boolean :is_shared, :null => false, :default => false
       t.timestamps
     end
     add_index :cms_snippets, [:site_id, :slug], :unique => true

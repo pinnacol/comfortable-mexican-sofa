@@ -20,7 +20,7 @@ class CmsAdmin::RevisionsController < CmsAdmin::BaseController
   
   def revert
     @record.restore_from_revision(@revision)
-    flash[:notice] = 'Content Reverted'
+    flash[:notice] = I18n.t('cms.revisions.reverted')
     redirect_to_record
   end
   
@@ -35,22 +35,22 @@ protected
       Cms::Snippet.find(params[:snippet_id])
     end
   rescue ActiveRecord::RecordNotFound
-    flash[:error] = 'Record Not Found'
+    flash[:error] = I18n.t('cms.revisions.record_not_found')
     redirect_to cms_admin_path
   end
   
   def load_revision
     @revision = @record.revisions.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    flash[:error] = 'Revision Not Found'
+    flash[:error] = I18n.t('cms.revisions.not_found')
     redirect_to_record
   end
   
   def redirect_to_record
     redirect_to case @record
-      when Cms::Layout  then edit_cms_admin_layout_path(@record)
-      when Cms::Page    then edit_cms_admin_page_path(@record)
-      when Cms::Snippet then edit_cms_admin_snippet_path(@record)
+      when Cms::Layout  then edit_cms_admin_site_layout_path(@site, @record)
+      when Cms::Page    then edit_cms_admin_site_page_path(@site, @record)
+      when Cms::Snippet then edit_cms_admin_site_snippet_path(@site, @record)
     end
   end
   

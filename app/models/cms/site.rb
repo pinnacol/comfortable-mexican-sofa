@@ -10,24 +10,29 @@ class Cms::Site < ActiveRecord::Base
   
   # -- Callbacks ------------------------------------------------------------
   before_validation :assign_label
+  before_save :clean_path
   
   # -- Validations ----------------------------------------------------------
   validates :label,
     :presence   => true
   validates :hostname,
     :presence   => true,
-    :uniqueness => true,
+    :uniqueness => { :scope => :path },
     :format     => { :with => /^[\w\.\-]+$/ }
     
-  # -- Class Methods --------------------------------------------------------
-  def self.options_for_select
-    Cms::Site.all.collect{|s| ["#{s.label} (#{s.hostname})", s.id]}
-  end
+  # -- Scopes ---------------------------------------------------------------
+  scope :mirrored, where(:is_mirrored => true)
   
 protected
-
+  
   def assign_label
     self.label = self.label.blank?? self.hostname : self.label
+  end
+  
+  def clean_path
+    self.path ||= ''
+    self.path.squeeze!('/')
+    self.path.gsub!(/\/$/, '')
   end
   
 end

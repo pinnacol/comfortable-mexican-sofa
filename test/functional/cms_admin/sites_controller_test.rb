@@ -5,7 +5,7 @@ class CmsAdmin::SitesControllerTest < ActionController::TestCase
   def test_get_index
     get :index
     assert_response :success
-    assert assigns(:cms_sites)
+    assert assigns(:sites)
     assert_template :index
   end
 
@@ -19,8 +19,8 @@ class CmsAdmin::SitesControllerTest < ActionController::TestCase
   def test_get_new
     get :new
     assert_response :success
-    assert assigns(:cms_site)
-    assert_equal 'test.host', assigns(:cms_site).hostname
+    assert assigns(:site)
+    assert_equal 'test.host', assigns(:site).hostname
     assert_template :new
     assert_select 'form[action=/cms-admin/sites]'
   end
@@ -29,7 +29,7 @@ class CmsAdmin::SitesControllerTest < ActionController::TestCase
     site = cms_sites(:default)
     get :edit, :id => site
     assert_response :success
-    assert assigns(:cms_site)
+    assert assigns(:site)
     assert_template :edit
     assert_select "form[action=/cms-admin/sites/#{site.id}]"
   end
@@ -43,20 +43,20 @@ class CmsAdmin::SitesControllerTest < ActionController::TestCase
   
   def test_create
     assert_difference 'Cms::Site.count' do
-      post :create, :cms_site => {
+      post :create, :site => {
         :label    => 'Test Site',
         :hostname => 'test.site.local'
       }
       assert_response :redirect
       site = Cms::Site.last
-      assert_redirected_to :action => :edit, :id => site
+      assert_redirected_to cms_admin_site_layouts_path(site)
       assert_equal 'Site created', flash[:notice]
     end
   end
 
   def test_creation_failure
     assert_no_difference 'Cms::Site.count' do
-      post :create, :cms_site => { }
+      post :create, :site => { }
       assert_response :success
       assert_template :new
       assert_equal 'Failed to create site', flash[:error]
@@ -65,7 +65,7 @@ class CmsAdmin::SitesControllerTest < ActionController::TestCase
 
   def test_update
     site = cms_sites(:default)
-    put :update, :id => site, :cms_site => {
+    put :update, :id => site, :site => {
       :label    => 'New Site',
       :hostname => 'new.site.local'
     }
@@ -79,7 +79,7 @@ class CmsAdmin::SitesControllerTest < ActionController::TestCase
 
   def test_update_failure
     site = cms_sites(:default)
-    put :update, :id => site, :cms_site => {
+    put :update, :id => site, :site => {
       :hostname => ''
     }
     assert_response :success

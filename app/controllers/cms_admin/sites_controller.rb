@@ -1,14 +1,14 @@
 class CmsAdmin::SitesController < CmsAdmin::BaseController
 
-  skip_before_filter  :load_admin_cms_site,
+  skip_before_filter  :load_admin_site,
                       :load_fixtures
 
-  before_filter :build_cms_site,  :only => [:new, :create]
-  before_filter :load_cms_site,   :only => [:edit, :update, :destroy]
+  before_filter :build_site,  :only => [:new, :create]
+  before_filter :load_site,   :only => [:edit, :update, :destroy]
 
   def index
     return redirect_to :action => :new if Cms::Site.count == 0
-    @cms_sites = Cms::Site.all
+    @sites = Cms::Site.all
   end
 
   def new
@@ -20,40 +20,41 @@ class CmsAdmin::SitesController < CmsAdmin::BaseController
   end
 
   def create
-    @cms_site.save!
-    flash[:notice] = 'Site created'
-    redirect_to :action => :edit, :id => @cms_site
+    @site.save!
+    flash[:notice] = I18n.t('cms.sites.created')
+    redirect_to cms_admin_site_layouts_path(@site)
   rescue ActiveRecord::RecordInvalid
-    flash.now[:error] = 'Failed to create site'
+    flash.now[:error] = I18n.t('cms.sites.creation_failure')
     render :action => :new
   end
 
   def update
-    @cms_site.update_attributes!(params[:cms_site])
-    flash[:notice] = 'Site updated'
-    redirect_to :action => :edit, :id => @cms_site
+    @site.update_attributes!(params[:site])
+    flash[:notice] = I18n.t('cms.sites.updated')
+    redirect_to :action => :edit, :id => @site
   rescue ActiveRecord::RecordInvalid
-    flash.now[:error] = 'Failed to update site'
+    flash.now[:error] = I18n.t('cms.sites.update_failure')
     render :action => :edit
   end
 
   def destroy
-    @cms_site.destroy
-    flash[:notice] = 'Site deleted'
+    @site.destroy
+    flash[:notice] = I18n.t('cms.sites.deleted')
     redirect_to :action => :index
   end
 
 protected
 
-  def build_cms_site
-    @cms_site = Cms::Site.new(params[:cms_site])
-    @cms_site.hostname ||= request.host.downcase
+  def build_site
+    @site = Cms::Site.new(params[:site])
+    @site.hostname ||= request.host.downcase
   end
 
-  def load_cms_site
-    @cms_site = Cms::Site.find(params[:id])
+  def load_site
+    @site = Cms::Site.find(params[:id])
+    I18n.locale = ComfortableMexicanSofa.config.admin_locale || @site.locale
   rescue ActiveRecord::RecordNotFound
-    flash[:error] = 'Site not found'
+    flash[:error] = I18n.t('cms.sites.not_found')
     redirect_to :action => :index
   end
 

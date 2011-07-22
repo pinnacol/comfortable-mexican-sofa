@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 ComfortableMexicanSofa.configure do |config|
   # Title of the admin area
   #   config.cms_title = 'ComfortableMexicanSofa MicroCMS'
@@ -11,32 +13,14 @@ ComfortableMexicanSofa.configure do |config|
   # entirely set this to '' or nil
   #   config.admin_route_prefix = 'cms-admin'
   
-  # By default Cms content is served directly from the root. Change this setting
-  # if you wish to restrict all content to a section of your site.
-  # To have root page served from http://yourhost/content/ set config below to 'content'
-  #   config.content_route_prefix = ''
-  
-  # Path: /cms-admin redirects to /cms-admin/pages but you can change it
-  #   config.admin_route_redirect = 'pages'
-  
-  # If you enable this setting you'll be able to serve completely different set
-  # of sites with their own layouts and pages.
-  #   config.enable_multiple_sites = true
-  
-  # In cases when you need sites with identical page tree structure, like different
-  # language versions. This will automatically create/destroy resources across all sites and
-  # will keep slugs/paths synced.
-  #   config.enable_mirror_sites = true
+  # When arriving at /cms-admin you may chose to redirect to arbirtary path,
+  # for example '/cms-admin/users'
+  #   config.admin_route_redirect = ''
   
   # By default you cannot have irb code inside your layouts/pages/snippets.
   # Generally this is to prevent putting something like this:
   # <% User.delete_all %> but if you really want to allow it...
-  #   config.disable_irb = true
-  
-  # Asset caching for CSS and JS for admin layout. This setting also controls
-  # page caching for CMS Layout CSS and Javascript. Enabled by default. When deploying
-  # to an environment with read-only filesystem (like Heroku) turn this setting off.
-  #   config.enable_caching = true
+  #   config.allow_irb = false
   
   # File uploads use Paperclip and can support filesystem or s3 uploads.  Override
   # the upload method and appropriate settings based on Paperclip.  For S3 see:
@@ -56,6 +40,14 @@ ComfortableMexicanSofa.configure do |config|
   # a previous version using this system. You can control how many revisions per
   # object you want to keep. Set it to 0 if you wish to turn this feature off.
   #   config.revisions_limit = 25
+  
+  # Locale definitions. If you want to define your own locale merge
+  # {:locale => 'Locale Title'} with this.
+  #   config.locales = {:en => 'English', :es => 'Español'}
+  
+  # Admin interface will respect the locale of the site being managed. However you can
+  # force it to English by setting this to `:en`
+  #   config.admin_locale = nil
   
 end
 

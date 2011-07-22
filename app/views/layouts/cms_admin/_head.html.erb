@@ -2,7 +2,10 @@
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <title><%= ComfortableMexicanSofa.config.cms_title %></title>
   <%= csrf_meta_tag %>
+
   <meta name="cms-admin-path" content="<%= ComfortableMexicanSofa.config.admin_route_prefix %>" />
+  <meta name="cms-locale" content="<%= I18n.locale %>" />
+  <meta name="cms-js-assets-base-path" content="<%= ComfortableMexicanSofa.asset_pipeline_enabled?? '/assets' : '/javascripts' %>/comfortable_mexican_sofa"/>
 
   <% if ComfortableMexicanSofa.asset_pipeline_enabled? %>
 
@@ -21,7 +24,8 @@
                             'comfortable_mexican_sofa/form',
                             'comfortable_mexican_sofa/content',
                             'comfortable_mexican_sofa/widgets',
-                            'comfortable_mexican_sofa/codemirror' %>
+                            'comfortable_mexican_sofa/codemirror',
+                            'comfortable_mexican_sofa/jquery_ui' %>
     <%= javascript_include_tag  'comfortable_mexican_sofa/jquery',
                                 'comfortable_mexican_sofa/jquery_ui',
                                 'comfortable_mexican_sofa/rails',
