@@ -4,10 +4,10 @@ class CmsContentController < ApplicationController
   before_filter :load_fixtures
   before_filter :load_cms_page,   :only => :render_html
   before_filter :load_cms_layout, :only => [:render_css, :render_js]
-  
+
   def render_html(status = 200)
     if layout = @cms_page.layout
-      app_layout = layout.app_layout.blank?? false : layout.app_layout
+      app_layout = (layout.app_layout.blank? || request.xhr?) ? false : layout.app_layout
       render :inline => @cms_page.content, :layout => app_layout, :status => status
     else
       render :text => I18n.t('cms.content.layout_not_found'), :status => 404
@@ -28,7 +28,7 @@ protected
     return unless ComfortableMexicanSofa.config.enable_fixtures
     ComfortableMexicanSofa::Fixtures.import_all(@cms_site.hostname)
   end
-  
+
   def load_cms_site
     if params[:site_id]
       @cms_site ||= Cms::Site.find_by_id(params[:site_id])
@@ -43,7 +43,7 @@ protected
         end
       end unless @cms_site
     end
-    
+
     if @cms_site
       params[:cms_path].to_s.gsub!(/^#{@cms_site.path}/, '').gsub!(/^\//, '')
       I18n.locale = @cms_site.locale
@@ -52,7 +52,7 @@ protected
       render :text => I18n.t('cms.content.site_not_found'), :status => 404
     end
   end
-  
+
   def load_fixtures
     return unless ComfortableMexicanSofa.config.enable_fixtures
     ComfortableMexicanSofa::Fixtures.import_all(@cms_site.hostname)
