@@ -6,4 +6,8 @@ class CmsAdmin::FixturesController < CmsAdmin::BaseController
   def index
     @fixtures = Cms::Fixture.all
   end
+
+  def new
+    @fixture  = Cms::Fixture.new
+  end
 end

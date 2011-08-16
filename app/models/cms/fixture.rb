@@ -4,7 +4,7 @@ class Cms::Fixture
   include ActiveModel::Conversion
   include ActiveModel::Validations
 
-  attr_accessor :name, :path
+  attr_accessor :name, :path, :file
   attr_reader   :errors
 
   def self.all
@@ -30,6 +30,10 @@ class Cms::Fixture
 
   def destroyed?
     true
+  end
+
+  def i18n_scope
+    :activerecord
   end
 
   def new_record?

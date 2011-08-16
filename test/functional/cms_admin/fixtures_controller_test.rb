@@ -7,4 +7,12 @@ class CmsAdmin::FixturesControllerTest < ActionController::TestCase
     assert assigns(:fixtures)
     assert_template :index
   end
+
+  def test_get_new
+    get :new
+    assert_response :success
+    assert assigns(:fixture)
+    assert_template :new
+    assert_select 'form[action=/cms-admin/fixtures]'
+  end
 end

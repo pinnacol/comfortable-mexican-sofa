@@ -9,6 +9,7 @@ en:
   activerecord:
     models:
       cms/site: Site
+      cms/fixture: Fixture
       cms/layout: Layout
       cms/page: Page
       cms/snippet: Snippet
@@ -18,6 +19,9 @@ en:
         path: Path
         locale: Language
         is_mirrored: Mirrored
+      cms/fixture:
+        name: Name
+        file: Zip File
       cms/layout:
         label: Layout Name
         app_layout: App Layout

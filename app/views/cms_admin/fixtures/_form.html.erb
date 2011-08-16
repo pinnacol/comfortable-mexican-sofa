@@ -1,0 +1,6 @@
+<%= form.text_field :name, :label => t("activerecord.attributes.cms/fixture.name") %>
+<%= form.file_field :file, :label => t("activerecord.attributes.cms/fixture.file") %>
+
+<%= form.simple_field nil, nil, :class => 'submit_element' do %>
+  <%= form.submit t('.create'), :disable_builder => true %>
+<% end %>
