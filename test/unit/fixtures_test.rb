@@ -300,9 +300,4 @@ class FixturesTest < ActiveSupport::TestCase
     ComfortableMexicanSofa::Fixtures.export_all('test.host', 'test.test')
     FileUtils.rm_rf(host_path)
   end
-
-  def test_all
-    assert_respond_to ComfortableMexicanSofa::Fixtures, :all
-    assert_kind_of Array, ComfortableMexicanSofa::Fixtures.all
-  end
 end
