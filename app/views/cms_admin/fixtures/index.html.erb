@@ -1,0 +1,19 @@
+<%= link_to span_tag(t('.new_link')), new_cms_admin_fixture_path, :class => 'big button' %>
+<h1><%= t('.title') %></h1>
+
+<ul class='list'>
+  <% @fixtures.each do |fixture| %>
+    <li id='cms_fixture_<%= fixture.to_param %>'>
+      <div class='item'>
+        <div class='icon'></div>
+        <div class='action_links'>
+          <%= link_to t('.delete'), cms_admin_fixture_path(fixture), :method => :delete, :confirm => t('.are_you_sure') %>
+          <%= link_to t('.import'), edit_cms_admin_fixture_path(fixture) %>
+        </div>
+        <div class='label'>
+          <%= fixture %>
+        </div>
+      </div>
+    </li>
+  <% end %>
+</ul>
