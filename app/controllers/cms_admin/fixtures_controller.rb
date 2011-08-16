@@ -4,6 +4,6 @@ class CmsAdmin::FixturesController < CmsAdmin::BaseController
                       :load_fixtures
 
   def index
-    @fixtures = ComfortableMexicanSofa::Fixtures.all
+    @fixtures = Cms::Fixture.all
   end
 end
