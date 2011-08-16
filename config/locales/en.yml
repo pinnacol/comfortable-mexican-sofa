@@ -97,6 +97,7 @@ en:
         new_link: Create New Site
         edit: Edit
         delete: Delete
+        import: Import
         are_you_sure: Are you sure you want to delete this site?
       new:
         title: New Site
@@ -105,6 +106,20 @@ en:
       form:
         create: Create Site
         update: Update Site
+
+    fixtures:
+      index:
+        title: Fixtures
+        new_link: Upload New Fixture
+        edit: Edit
+        delete: Delete
+        are_you_sure: Are you sure you want to delete this fixture?
+      new:
+        title: Import Fixture
+      edit:
+        title: Editing Fixture
+      form:
+        create: Import
 
     layouts:
       index:
