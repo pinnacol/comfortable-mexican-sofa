@@ -12,6 +12,10 @@ module ComfortableMexicanSofa::Fixtures
     export_snippets from_hostname, to_hostname
   end
   
+  def self.all
+    Pathname.new(ComfortableMexicanSofa.config.fixtures_path).children.collect { |c| c.basename.to_s }
+  end
+  
   def self.import_layouts(to_hostname, from_hostname = nil, path = nil, root = true, parent = nil, layout_ids = [])
     return unless site = Cms::Site.find_by_hostname(to_hostname)
     return unless path ||= find_fixtures_path((from_hostname || to_hostname), 'layouts')
