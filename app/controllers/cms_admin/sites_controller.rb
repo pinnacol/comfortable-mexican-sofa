@@ -54,8 +54,6 @@ class CmsAdmin::SitesController < CmsAdmin::BaseController
       end
     elsif request.get?
       render :action => :export
-    else
-      redirect_to :action => :index
     end
   end
 
