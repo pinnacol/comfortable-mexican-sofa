@@ -31,7 +31,12 @@ Rails.application.routes.draw do
         end
       end
     end
-    resources :fixtures
+    resources :fixtures do
+      member do
+        get :import
+        put :import
+      end
+    end
   end unless ComfortableMexicanSofa.config.admin_route_prefix.blank?
 
   scope :controller => :cms_content do

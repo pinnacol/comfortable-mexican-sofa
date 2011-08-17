@@ -46,6 +46,16 @@ class Cms::Fixture
     @errors = ActiveModel::Errors.new(self)
   end
 
+  def import(to_hostname)
+    begin
+      ComfortableMexicanSofa::Fixtures.import_all(to_hostname, name)
+    rescue => error
+      Rails.logger.error(error.to_s)
+      return false
+    end
+    return true
+  end
+
   def destroy
     path.rmtree
   end

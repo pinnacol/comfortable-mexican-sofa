@@ -3,8 +3,8 @@ require File.expand_path('../../test_helper', File.dirname(__FILE__))
 class CmsAdmin::FixturesControllerTest < ActionController::TestCase
   def setup
     super
-    @model = Cms::Fixture.new(:name => cms_sites(:default).hostname)
     ComfortableMexicanSofa::Fixtures.export_all(cms_sites(:default).hostname)
+    @model = Cms::Fixture.new(:name => cms_sites(:default).hostname)
   end
 
   def test_get_index
@@ -29,5 +29,21 @@ class CmsAdmin::FixturesControllerTest < ActionController::TestCase
       assert_redirected_to :action => :index
       assert_equal 'Fixture deleted', flash[:notice]
     end
+  end
+
+  def test_get_import
+    get :import, :id => @model.to_key
+    assert_response :success
+    assert_template :import
+    assert_select 'form[action=/cms-admin/fixtures/' + @model.to_key.to_s + '/import]'
+  end
+
+  def test_put_import
+    put :import, :id => @model.to_key, :fixture => {
+      :name => cms_sites(:default).hostname
+    }
+    assert_response :redirect
+    assert_redirected_to :action => :index
+    assert_equal 'Fixture imported', flash[:notice]
   end
 end

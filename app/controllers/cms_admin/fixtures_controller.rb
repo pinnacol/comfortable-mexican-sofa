@@ -17,4 +17,17 @@ class CmsAdmin::FixturesController < CmsAdmin::BaseController
     flash[:notice] = I18n.t('cms.fixtures.deleted')
     redirect_to :action => :index
   end
+
+  def import
+    @fixture = Cms::Fixture.find(params[:id])
+
+    if request.put? && @fixture.import(params[:fixture][:name])
+      flash[:notice] = I18n.t('cms.fixtures.imported')
+      redirect_to :action => :index
+    elsif request.get?
+      render :action => :import
+    else
+      redirect_to :action => :index
+    end
+  end
 end

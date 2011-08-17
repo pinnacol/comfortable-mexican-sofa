@@ -1,0 +1,9 @@
+<h1><%= t('.title') %>: <%= @fixture.name %></h1>
+
+<%= cms_form_for @fixture, :as => :fixture, :url => {:action => :import}, :method => :put do |form| %>
+  <%= form.select :name, options_from_collection_for_select(Cms::Site.all, :hostname, :hostname), :label => t('.hostname') %>
+
+  <%= form.simple_field nil, nil, :class => 'submit_element' do %>
+    <%= form.submit t('.import'), :disable_builder => true %>
+  <% end %>
+<% end %>
