@@ -3,10 +3,14 @@ class CmsAdmin::FixturesController < CmsAdmin::BaseController
   skip_before_filter  :load_admin_site,
                       :load_fixtures
 
-  before_filter :load_fixture,   :only => [:show, :destroy, :export]
+  before_filter :load_fixture,   :only => [:show, :destroy, :import]
 
   def index
     @fixtures = Cms::Fixture.all
+  end
+
+  def new
+    @fixture  = Cms::Fixture.new
   end
 
   def destroy
