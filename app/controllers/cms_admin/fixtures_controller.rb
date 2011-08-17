@@ -3,24 +3,19 @@ class CmsAdmin::FixturesController < CmsAdmin::BaseController
   skip_before_filter  :load_admin_site,
                       :load_fixtures
 
+  before_filter :load_fixture,   :only => [:show, :destroy, :export]
+
   def index
     @fixtures = Cms::Fixture.all
   end
 
-  def new
-    @fixture  = Cms::Fixture.new
-  end
-
   def destroy
-    @fixture = Cms::Fixture.find(params[:id])
     @fixture.destroy
     flash[:notice] = I18n.t('cms.fixtures.deleted')
     redirect_to :action => :index
   end
 
   def import
-    @fixture = Cms::Fixture.find(params[:id])
-
     if request.put? && @fixture.import(params[:fixture][:name])
       flash[:notice] = I18n.t('cms.fixtures.imported')
       redirect_to :action => :index
@@ -29,5 +24,13 @@ class CmsAdmin::FixturesController < CmsAdmin::BaseController
     else
       redirect_to :action => :index
     end
+  end
+
+protected
+  def load_fixture
+    @fixture = Cms::Fixture.find(params[:id])
+  rescue
+    flash[:error] = I18n.t('cms.fixtures.not_found')
+    redirect_to :action => :index
   end
 end
