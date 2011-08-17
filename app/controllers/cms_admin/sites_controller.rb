@@ -45,8 +45,7 @@ class CmsAdmin::SitesController < CmsAdmin::BaseController
 
   def export
     if request.put?
-      if params[:site][:hostname].present?
-        ComfortableMexicanSofa::Fixtures.export_all(@site.hostname, params[:site][:hostname])
+      if params[:site][:hostname].present? && Cms::Fixture.export(@site.hostname, params[:site][:hostname])
         flash[:notice] = I18n.t('cms.sites.exported')
         redirect_to :action => :index
       else

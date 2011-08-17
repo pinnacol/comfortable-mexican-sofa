@@ -23,6 +23,16 @@ class Cms::Fixture
     all.count
   end
 
+  def self.export(from_hostname, to_hostname)
+    begin
+      ComfortableMexicanSofa::Fixtures.export_all(from_hostname, to_hostname)
+    rescue => error
+      Rails.logger.error(error.to_s)
+      return false
+    end
+    return true
+  end
+
   def self.find(id)
     id = from_url(id)
     all.find(nil) { |f| f.name == id }
