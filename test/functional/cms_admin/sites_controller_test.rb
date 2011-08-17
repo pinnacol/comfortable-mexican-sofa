@@ -40,7 +40,7 @@ class CmsAdmin::SitesControllerTest < ActionController::TestCase
     assert_redirected_to :action => :index
     assert_equal 'Site not found', flash[:error]
   end
-  
+
   def test_create
     assert_difference 'Cms::Site.count' do
       post :create, :site => {
@@ -95,6 +95,38 @@ class CmsAdmin::SitesControllerTest < ActionController::TestCase
       assert_response :redirect
       assert_redirected_to :action => :index
       assert_equal 'Site deleted', flash[:notice]
+    end
+  end
+
+  def test_get_export
+    get :export, :id => cms_sites(:default)
+    assert_response :success
+    assert_template :export
+  end
+
+  def test_put_export
+    host_name = 'test.test'
+    host_path = File.join(ComfortableMexicanSofa.config.fixtures_path, host_name)
+    assert_difference 'Cms::Fixture.count' do
+      put :export, :id => cms_sites(:default), :site => {
+        :hostname => host_name
+      }
+      assert_response :redirect
+      assert_redirected_to :action => :index
+      assert_equal 'Site exported', flash[:notice]
+    end
+    FileUtils.rm_rf(host_path)
+  end
+
+  def test_put_export_without_hostname
+    host_name = ''
+    assert_no_difference 'Cms::Fixture.count' do
+      put :export, :id => cms_sites(:default), :site => {
+        :hostname => host_name
+      }
+      assert_response :success
+      assert_template :export
+      assert_equal 'Fixture name can not be blank', flash[:error]
     end
   end
 end

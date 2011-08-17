@@ -4,7 +4,7 @@ class CmsAdmin::SitesController < CmsAdmin::BaseController
                       :load_fixtures
 
   before_filter :build_site,  :only => [:new, :create]
-  before_filter :load_site,   :only => [:edit, :update, :destroy]
+  before_filter :load_site,   :only => [:edit, :update, :destroy, :export]
 
   def index
     return redirect_to :action => :new if Cms::Site.count == 0
@@ -41,6 +41,22 @@ class CmsAdmin::SitesController < CmsAdmin::BaseController
     @site.destroy
     flash[:notice] = I18n.t('cms.sites.deleted')
     redirect_to :action => :index
+  end
+
+  def export
+    if request.put?
+      if params[:site][:hostname].present?
+        ComfortableMexicanSofa::Fixtures.export_all(@site.hostname, params[:site][:hostname])
+        flash[:notice] = I18n.t('cms.sites.exported')
+        redirect_to :action => :index
+      else
+        flash.now[:error] = I18n.t('cms.sites.export_failure')
+      end
+    elsif request.get?
+      render :action => :export
+    else
+      redirect_to :action => :index
+    end
   end
 
 protected

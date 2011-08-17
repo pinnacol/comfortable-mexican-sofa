@@ -3,6 +3,10 @@ Rails.application.routes.draw do
   namespace :cms_admin, :path => ComfortableMexicanSofa.config.admin_route_prefix, :except => :show do
     get '/', :to => 'base#jump'
     resources :sites do
+      member do
+        get :export
+        put :export
+      end
       resources :pages do
         member do
           match :form_blocks

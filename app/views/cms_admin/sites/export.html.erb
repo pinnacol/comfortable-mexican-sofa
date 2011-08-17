@@ -1,0 +1,9 @@
+<h1><%= t('.title') %>: <%= @site.label %></h1>
+
+<%= cms_form_for @site, :as => :site, :url => {:action => :export}, :method => :put do |form| %>
+  <%= form.text_field :hostname, :label => t('.hostname') %>
+
+  <%= form.simple_field nil, nil, :class => 'submit_element' do %>
+    <%= form.submit t('.export'), :disable_builder => true %>
+  <% end %>
+<% end %>
