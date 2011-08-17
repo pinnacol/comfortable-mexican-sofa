@@ -49,6 +49,9 @@ en:
       deleted: Site deleted
       not_found: Site not found
 
+    fixtures:
+      deleted: Fixture deleted
+
     layouts:
       created: Layout created
       creation_failure: Failed to create layout
