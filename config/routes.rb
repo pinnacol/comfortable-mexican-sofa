@@ -31,7 +31,7 @@ Rails.application.routes.draw do
         end
       end
     end
-    resources :fixtures do
+    resources :fixtures, :except => [:edit, :update] do
       member do
         get :import
         put :import
