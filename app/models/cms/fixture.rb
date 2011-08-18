@@ -15,6 +15,7 @@ class Cms::Fixture
 
   def self.all
     root_path.children.collect do |c|
+      next if c.basename.to_s =~ /^\./ || !c.directory?
       new(:name => c.basename.to_s, :path => c)
     end
   end
