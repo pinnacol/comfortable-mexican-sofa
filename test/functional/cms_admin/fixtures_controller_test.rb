@@ -22,6 +22,11 @@ class CmsAdmin::FixturesControllerTest < ActionController::TestCase
     assert_select 'form[action=/cms-admin/fixtures]'
   end
 
+  def test_get_show
+    get :show, :id => @model.to_key
+    assert_response :success
+  end
+
   def test_destroy
     assert_difference 'Cms::Fixture.count', -1 do
       delete :destroy, :id => @model.to_key

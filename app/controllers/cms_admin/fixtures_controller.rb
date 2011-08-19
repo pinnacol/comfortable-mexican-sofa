@@ -13,6 +13,10 @@ class CmsAdmin::FixturesController < CmsAdmin::BaseController
     @fixture  = Cms::Fixture.new
   end
 
+  def show
+    head(:ok)
+  end
+
   def destroy
     @fixture.destroy
     flash[:notice] = I18n.t('cms.fixtures.deleted')

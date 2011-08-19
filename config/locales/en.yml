@@ -54,6 +54,7 @@ en:
     fixtures:
       deleted: Fixture deleted
       imported: Fixture imported
+      not_found: Fixture not found
 
     layouts:
       created: Layout created
@@ -126,8 +127,9 @@ en:
       index:
         title: Fixtures
         new_link: Upload New Fixture
-        edit: Edit
+        download: Download
         delete: Delete
+        import: Import
         are_you_sure: Are you sure you want to delete this fixture?
       new:
         title: Upload Fixture Zip
