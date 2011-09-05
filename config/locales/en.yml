@@ -9,7 +9,6 @@ en:
   activerecord:
     models:
       cms/site: Site
-      cms/fixture: Fixture
       cms/layout: Layout
       cms/page: Page
       cms/snippet: Snippet
@@ -19,9 +18,6 @@ en:
         path: Path
         locale: Language
         is_mirrored: Mirrored
-      cms/fixture:
-        name: Name
-        file: Zip File
       cms/layout:
         label: Layout Name
         app_layout: App Layout
@@ -47,14 +43,7 @@ en:
       updated: Site updated
       update_failure: Failed to update site
       deleted: Site deleted
-      exported: Site exported
-      export_failure: Fixture name can not be blank
       not_found: Site not found
-
-    fixtures:
-      deleted: Fixture deleted
-      imported: Fixture imported
-      not_found: Fixture not found
 
     layouts:
       created: Layout created
@@ -86,7 +75,13 @@ en:
       record_not_found: Record Not Found
       not_found: Revision Not Found
 
-    uploads:
+    files:
+      created: Files uploaded
+      creation_failure: Failed to upload files
+      updated: File updated
+      update_failure: Failed to update file
+      deleted: File deleted
+      not_found: File not found
 
     content:
       site_not_found: Site Not Found
@@ -97,48 +92,25 @@ en:
   cms_admin:
     base:
       sites: Sites
-      fixtures: Fixtures
       layouts: Layouts
       pages: Pages
       snippets: Snippets
+      files: Files
 
     sites:
       index:
         title: Sites
         new_link: Create New Site
         edit: Edit
-        export: Export
         delete: Delete
-        import: Import
         are_you_sure: Are you sure you want to delete this site?
       new:
         title: New Site
       edit:
         title: Editing Site
-      export:
-        title: Export
-        export: Export
-        hostname: Fixture Name
       form:
         create: Create Site
         update: Update Site
-
-    fixtures:
-      index:
-        title: Fixtures
-        new_link: Upload New Fixture
-        download: Download
-        delete: Delete
-        import: Import
-        are_you_sure: Are you sure you want to delete this fixture?
-      new:
-        title: Upload Fixture Zip
-      import:
-        title: Import Fixture
-        import: Import
-        hostname: Site Hostname
-      form:
-        create: Import
 
     layouts:
       index:
@@ -209,6 +181,32 @@ en:
         slug: Slug
         update: Update to this Revision
 
-    uploads:
+    files:
       index:
+        title: Files
+        new_link: Upload New File
+        edit: Edit
+        delete: Delete
+        are_you_sure: Are you sure?
         button: Upload Files
+      new:
+        title: New File
+      edit:
+        title: Editing File
+      form:
+        create: Upload File
+        update: Update File
+
+    categories:
+      index:
+        label: Categories
+        edit: Edit
+        done: Done
+        all: All
+        add: Add
+      show:
+        are_you_sure: Are you sure?
+      edit:
+        save: Save
+      form:
+        label: Categories

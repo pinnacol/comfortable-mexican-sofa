@@ -7,7 +7,8 @@ class ConfigurationTest < ActiveSupport::TestCase
   def test_configuration_presense
     assert config = ComfortableMexicanSofa.configuration
     assert_equal 'ComfortableMexicanSofa MicroCMS', config.cms_title
-    assert_equal 'ComfortableMexicanSofa::HttpAuth', config.authentication
+    assert_equal 'ComfortableMexicanSofa::HttpAuth', config.admin_auth
+    assert_equal 'ComfortableMexicanSofa::DummyAuth', config.public_auth
     assert_equal 'cms-admin', config.admin_route_prefix
     assert_equal '', config.admin_route_redirect
     assert_equal false, config.allow_irb
@@ -16,6 +17,7 @@ class ConfigurationTest < ActiveSupport::TestCase
     assert_equal 25, config.revisions_limit
     assert_equal ({:en => 'English', :es => 'Español'}), config.locales
     assert_equal nil, config.admin_locale
+    assert_equal nil, config.database_config
   end
   
   def test_initialization_overrides

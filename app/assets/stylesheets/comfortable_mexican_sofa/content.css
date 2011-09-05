@@ -1,31 +1,43 @@
 /* -- Mirrors widget ----------------------------------------------------- */
-#mirrors.box select {
+#cms_body #mirrors.box select {
   width: 100%;
 }
-
 /* -- Page saving widget ------------------------------------------------- */
-#page_save button {
+#cms_body #page_save button {
   float: right;
 }
-#page_save label {
+#cms_body #page_save label {
   line-height: 20px;
   padding-left: 5px;
 }
-#page_save input {
+#cms_body #page_save input {
   margin-right: 5px;
 }
 /* -- File Upload widget ------------------------------------------------- */
-#file_uploads .actions {
+#cms_body #file_uploads form {
+  position: relative;
+  height: 21px;
+  overflow: hidden
+}
+#cms_body #file_uploads form input {
+  position: absolute;
+  margin-top: -1px;
+  right: 0px;
+  top: 0px;
+  font-size: 220px;
+  opacity: 0;
+}
+#cms_body #file_uploads .actions {
   overflow: hidden;
 }
-#file_uploads .actions a.button {
+#cms_body #file_uploads .actions a.button {
   float: right;
 }
-#file_uploads #uploaded_files {
+#cms_body #file_uploads #uploaded_files {
   max-height: 500px;
   overflow-y: auto;
 }
-#file_uploads #uploaded_files .file {
+#cms_body #file_uploads #uploaded_files .file {
   position: relative;
   overflow: hidden;
   font-size: 11px;
@@ -36,16 +48,16 @@
   border-radius: 2px;
   -moz-border-radius: 2px;
 }
-#file_uploads #uploaded_files .file.pending {
+#cms_body #file_uploads #uploaded_files .file.pending {
   opacity: 0.3;
 }
-#file_uploads #uploaded_files .file:hover {
+#cms_body #file_uploads #uploaded_files .file:hover {
   opacity: 1;
 }
-#file_uploads #uploaded_files .file a {
+#cms_body #file_uploads #uploaded_files .file a {
   color: #fff;
 }
-#file_uploads #uploaded_files .file a.delete {
+#cms_body #file_uploads #uploaded_files .file a.delete {
   position: absolute;
   display: block;
   right: 0px;
@@ -54,10 +66,92 @@
   width: 13px;
   font-weight: bold;
 }
-#file_uploads #uploaded_files .file:hover a.delete {
+#cms_body #file_uploads #uploaded_files .file:hover a.delete {
   color: #9e0b0f;
 }
-
+/* -- Categories Widget -------------------------------------------------- */
+#cms_body .categories_widget {
+  margin-bottom: 10px;
+  background-color: #252525;
+  padding: 5px 5px 0px 10px;
+  border-radius: 5px;
+  color: #fff;
+}
+#cms_body .categories_widget .label {
+  float: left;
+  font: 12px 'Lucida Grande', Tahoma, sans-serif;
+  width: 100px;
+}
+#cms_body .categories_widget a.action_link {
+  float: right;
+  margin-left: 10px;
+  padding: 2px 4px;
+  border: 0px;
+  border-radius: 2px;
+}
+#cms_body .categories_widget .categories {
+  overflow: hidden;
+  margin: 0px 50px 0px 110px;
+}
+#cms_body .categories_widget .category {
+  float: left;
+  overflow: hidden;
+  background-color: #484848;
+  border-radius: 3px;
+  color: #fff;
+  height: 9px;
+  padding: 3px 5px;
+  margin: 0px 5px 5px 0px;
+}
+#cms_body .categories_widget .category.active {
+  background-color: #f7f7f7;
+}
+#cms_body .categories_widget .category.active a,
+#cms_body .categories_widget .category.active a:hover {
+  color: #000;
+}
+#cms_body .categories_widget .category a {
+  float: left;
+  color: #a3a3a3;
+  font: 9px/9px Arial, serif;
+  text-transform: uppercase;
+}
+#cms_body .categories_widget .category a:hover {
+  color: #fff;
+}
+#cms_body .categories_widget .category a.delete {
+  float: right;
+  margin-left: 5px;
+  background-color: #b7b7b7;
+  color: #000;
+  font: bold 7px/7px Arial, sans-serif;
+  padding: 1px 3px;
+  border-radius: 4px;
+}
+#cms_body .categories_widget .category a.delete:hover {
+  background-color: #fff;
+}
+#cms_body .categories_widget .category.new,
+#cms_body .categories_widget .category.edit {
+  height: 15px;
+  padding: 0px;
+}
+#cms_body .categories_widget form input[type='text'] {
+  float: left;
+  width: 120px;
+  border: 0px;
+  padding: 1px 2px;
+  font: 11px/11px Arial, serif;
+  border-radius: 2px;
+}
+#cms_body .categories_widget form input[type='submit'] {
+  float: right;
+  font: 9px Arial, sans-serif;
+  padding: 1px 2px;
+  border: 0px;
+  border-radius: 2px;
+  margin-left: 5px;
+}
 /* -- Listings ----------------------------------------------------------- */
 #cms_body ul.list li .item {
   overflow: hidden;
@@ -104,9 +198,18 @@
   display: none;
 }
 #cms_body ul.list li .item .label {
-  margin-left: 60px;
+  margin-left: 32px;
   font-size: 14px;
   font-weight: bold;
+}
+#cms_body ul.list li .item .label span.category {
+  display: inline-block;
+  padding: 2px 5px;
+  font: 9px/9px Arial, sans-serif;
+  background-color: #e0e0e0;
+  border-radius: 3px;
+  text-transform: uppercase;
+  color: #888;
 }
 #cms_body ul.list li .item .label .sublabel {
   font-size: 10px;
@@ -125,45 +228,49 @@
 #cms_body ul.list li .item:hover {
   background-color: #fff;
 }
-
-/* -- Page Specific stuff ------------------------------------------------ */
-.c_cms_admin_sites.a_index ul.list li .item .label,
-.c_cms_admin_layouts.a_index ul.list li .item .label,
-.c_cms_admin_snippets.a_index ul.list li .item .label {
-  margin-left: 32px;
+/* -- Missing Translations ---------------------------------------------- */
+#cms_body .translation_missing {
+  text-decoration: blink;
 }
-.c_cms_admin_layouts.a_index ul.list li .item .icon {
+/* -- Page Specific stuff ------------------------------------------------ */
+#cms_body.c_cms_admin_pages.a_index ul.list li .item .label {
+  margin-left: 60px;
+}
+#cms_body.c_cms_admin_layouts.a_index ul.list li .item .icon {
   background-image: url(/assets/comfortable_mexican_sofa/icon_layout.gif);
 }
-.c_cms_admin_snippets.a_index ul.list li .item .icon {
+#cms_body.c_cms_admin_snippets.a_index ul.list li .item .icon {
   background-image: url(/assets/comfortable_mexican_sofa/icon_snippet.gif);
 }
+#cms_body.c_cms_admin_files textarea#file_description {
+  height: 100px;
+}
 /* -- Revisions ---------------------------------------------------------- */
-.c_cms_admin_revisions.a_show .form_element.submit_element .value {
+#cms_body.c_cms_admin_revisions.a_show .form_element.submit_element .value {
   margin-left: 0px;
 }
-.c_cms_admin_revisions.a_show .current {
+#cms_body.c_cms_admin_revisions.a_show .current {
   width: 50%;
   float: left;
 }
-.c_cms_admin_revisions.a_show .versioned {
+#cms_body.c_cms_admin_revisions.a_show .versioned {
   width: 50%;
   float: right;
 }
-.c_cms_admin_revisions.a_show .title,
-.c_cms_admin_revisions.a_show .content {
+#cms_body.c_cms_admin_revisions.a_show .title,
+#cms_body.c_cms_admin_revisions.a_show .content {
   padding: 2px 5px;
   margin: 0px 3px;
 }
-.c_cms_admin_revisions.a_show .title {
+#cms_body.c_cms_admin_revisions.a_show .title {
   background: #f1f1f1;
   border-bottom: 2px solid #bbb;
 }
-.c_cms_admin_revisions.a_show .content {
+#cms_body.c_cms_admin_revisions.a_show .content {
   min-height: 16px;
   border: 1px dashed #f1f1f1;
 }
-.c_cms_admin_revisions.a_show .revisions a {
+#cms_body.c_cms_admin_revisions.a_show .revisions a {
   display: block;
   background-color: #252525;
   border-radius: 2px;
@@ -172,10 +279,10 @@
   margin-bottom: 2px;
   color: #fff;
 }
-.c_cms_admin_revisions.a_show .revisions a:hover,
-.c_cms_admin_revisions.a_show .revisions a.active {
+#cms_body.c_cms_admin_revisions.a_show .revisions a:hover,
+#cms_body.c_cms_admin_revisions.a_show .revisions a.active {
   opacity: 1;
 }
-.c_cms_admin_revisions.a_show .revisions a:last-child {
+#cms_body.c_cms_admin_revisions.a_show .revisions a:last-child {
   margin-bottom: 0px;
 }

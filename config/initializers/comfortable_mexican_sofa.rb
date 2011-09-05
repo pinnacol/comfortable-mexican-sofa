@@ -6,7 +6,12 @@ ComfortableMexicanSofa.configure do |config|
   
   # Module responsible for authentication. You can replace it with your own.
   # It simply needs to have #authenticate method. See http_auth.rb for reference.
-  #   config.authentication = 'ComfortableMexicanSofa::HttpAuth'
+  #   config.admin_auth = 'ComfortableMexicanSofa::HttpAuth'
+  
+  # Module responsible for public authentication. Similar to the above. You also
+  # will have access to @cms_site, @cms_layout, @cms_page so you can use them in
+  # your logic. Default module doesn't do anything.
+  #   config.public_auth = 'ComfortableMexicanSofa::DummyAuth'
   
   # Default url to access admin area is http://yourhost/cms-admin/ 
   # You can change 'cms-admin' to 'admin', for example. To disable admin area
@@ -48,6 +53,12 @@ ComfortableMexicanSofa.configure do |config|
   # Admin interface will respect the locale of the site being managed. However you can
   # force it to English by setting this to `:en`
   #   config.admin_locale = nil
+  
+  # Database prefix.  If you want to keep your comfortable mexican sofa tables
+  # in a location other than the default databases add a database_config.
+  # Using a prefix of `cms_` will look for a cms_#{Rails.env} definition
+  # in your database.yml file
+  #   config.database_config = nil
   
 end
 

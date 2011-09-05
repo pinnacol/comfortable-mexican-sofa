@@ -1,9 +1,14 @@
 class CmsContentController < ApplicationController
 
+  # Authentication module must have #authenticate method
+  include ComfortableMexicanSofa.config.public_auth.to_s.constantize
+
   before_filter :load_cms_site
   before_filter :load_fixtures
-  before_filter :load_cms_page,   :only => :render_html
-  before_filter :load_cms_layout, :only => [:render_css, :render_js]
+  before_filter :load_cms_page, :authenticate,
+    :only => :render_html
+  before_filter :load_cms_layout,
+    :only => [:render_css, :render_js]
 
   def render_html(status = 200)
     if layout = @cms_page.layout
@@ -30,18 +35,10 @@ protected
   end
 
   def load_cms_site
-    if params[:site_id]
-      @cms_site ||= Cms::Site.find_by_id(params[:site_id])
+    @cms_site ||= if params[:site_id]
+      Cms::Site.find_by_id(params[:site_id])
     else
-      @cms_site ||= Cms::Site.first if Cms::Site.count == 1
-      Cms::Site.find_all_by_hostname(request.host.downcase).each do |site|
-        if site.path.blank?
-          @cms_site = site
-        elsif "#{request.fullpath}/".match /^\/#{Regexp.escape(site.path.to_s)}\//
-          @cms_site = site
-          break
-        end
-      end unless @cms_site
+      Cms::Site.find_site(request.host.downcase, request.fullpath)
     end
 
     if @cms_site

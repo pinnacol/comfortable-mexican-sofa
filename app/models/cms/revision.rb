@@ -1,5 +1,7 @@
 class Cms::Revision < ActiveRecord::Base
   
+  ComfortableMexicanSofa.establish_connection(self)
+  
   set_table_name :cms_revisions
   
   serialize :data

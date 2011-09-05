@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # This module provides all Tag classes with neccessary methods.
 # Example class that will behave as a Tag:
 #   class MySpecialTag
@@ -85,8 +87,8 @@ module ComfortableMexicanSofa::Tag
     end
     
     # Initializing Cms::Upload object
-    def upload
-      page.site.uploads.detect{|s| s.file_file_name == self.label.to_s}
+    def file
+      page.site.files.detect{|f| f.file_file_name == self.label.to_s}
     end
     
     # Checks if this tag is using Cms::Block

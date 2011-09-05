@@ -75,7 +75,13 @@ es:
       record_not_found: Registro no encontrado
       not_found: Revisión no encontrada
 
-    uploads:
+    files:
+      created: Files uploaded
+      creation_failure: Failed to upload files
+      updated: File updated
+      update_failure: Failed to update file
+      deleted: File deleted
+      not_found: File not found
 
     content:
       site_not_found: Sitio no encontrado
@@ -89,7 +95,8 @@ es:
       layouts: Diseños
       pages: Páginas
       snippets: Fragmentos
-
+      files: Files
+      
     sites:
       index:
         title: Listado de Sitios
@@ -165,7 +172,7 @@ es:
       form:
         create: Crear Fragmento
         update: Actualizar Fragmento
-
+        
     revisions:
       show:
         title: Revisiones de
@@ -173,7 +180,33 @@ es:
         full_path: Ruta completa
         slug: Identificador
         update: Actualizar a esta versión
-
-    uploads:
+        
+    files:
       index:
+        title: Files
+        new_link: Upload New File
+        edit: Edit
+        delete: Delete
+        are_you_sure: Are you sure?
         button: Cargar Archivos
+      new:
+        title: New File
+      edit:
+        title: Editing File
+      form:
+        create: Upload File
+        update: Update File
+          
+    categories:
+      index:
+        label: Categories
+        edit: Edit
+        done: Done
+        all: All
+        add: Add
+      show:
+        are_you_sure: Are you sure?
+      edit:
+        save: Save
+      form:
+        label: Categories

@@ -1,6 +1,9 @@
 class CreateCms < ActiveRecord::Migration
   
   def self.up
+    
+    ComfortableMexicanSofa.establish_connection(self)
+    
     # -- Sites --------------------------------------------------------------
     create_table :cms_sites do |t|
       t.string :label
@@ -68,15 +71,18 @@ class CreateCms < ActiveRecord::Migration
     end
     add_index :cms_snippets, [:site_id, :slug], :unique => true
     
-    # -- Assets -------------------------------------------------------------
-    create_table :cms_uploads do |t|
+    # -- Files --------------------------------------------------------------
+    create_table :cms_files do |t|
       t.integer :site_id
+      t.string  :label
       t.string  :file_file_name
       t.string  :file_content_type
       t.integer :file_file_size
+      t.string  :description, :limit => 2048
       t.timestamps
     end
-    add_index :cms_uploads, [:site_id, :file_file_name]
+    add_index :cms_files, [:site_id, :label]
+    add_index :cms_files, [:site_id, :file_file_name]
     
     # -- Revisions -----------------------------------------------------------
     create_table :cms_revisions, :force => true do |t|
@@ -87,15 +93,34 @@ class CreateCms < ActiveRecord::Migration
     end
     add_index :cms_revisions, [:record_type, :record_id, :created_at]
     
+    # -- Categories ---------------------------------------------------------
+    create_table :cms_categories, :force => true do |t|
+      t.string :label
+      t.string :categorized_type
+    end
+    add_index :cms_categories, [:categorized_type, :label], :unique => true
+    
+    create_table :cms_categorizations, :force => true do |t|
+      t.integer :category_id
+      t.string  :categorized_type
+      t.integer :categorized_id
+    end
+    add_index :cms_categorizations, [:category_id, :categorized_type, :categorized_id], :unique => true,
+      :name => 'index_cms_categorizations_on_cat_id_and_catd_type_and_catd_id'
   end
   
   def self.down
+    
+    ComfortableMexicanSofa.establish_connection(self)
+    
     drop_table :cms_sites
     drop_table :cms_layouts
     drop_table :cms_pages
     drop_table :cms_snippets
     drop_table :cms_blocks
-    drop_table :cms_uploads
+    drop_table :cms_files
     drop_table :cms_revisions
+    drop_table :cms_categories
+    drop_table :cms_categorizations
   end
 end

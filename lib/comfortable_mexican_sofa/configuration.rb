@@ -6,7 +6,10 @@ class ComfortableMexicanSofa::Configuration
   attr_accessor :cms_title
   
   # Module that will handle authentication to access cms-admin area
-  attr_accessor :authentication
+  attr_accessor :admin_auth
+  
+  # Module that will handle authentication for public pages
+  attr_accessor :public_auth
   
   # Default url to access admin area is http://yourhost/cms-admin/ 
   # You can change 'cms-admin' to 'admin', for example.
@@ -40,10 +43,17 @@ class ComfortableMexicanSofa::Configuration
   # force it to English by setting this to `:en`
   attr_accessor :admin_locale
   
+  # Database prefix.  If you want to keep your comfortable mexican sofa tables
+  # in a location other than the default databases add a database_config.
+  # Setting this to `cms` will look for a cms_#{Rails.env} database definition
+  # in your database.yml file
+  attr_accessor :database_config
+  
   # Configuration defaults
   def initialize
     @cms_title              = 'ComfortableMexicanSofa MicroCMS'
-    @authentication         = 'ComfortableMexicanSofa::HttpAuth'
+    @admin_auth             = 'ComfortableMexicanSofa::HttpAuth'
+    @public_auth            = 'ComfortableMexicanSofa::DummyAuth'
     @seed_data_path         = nil
     @admin_route_prefix     = 'cms-admin'
     @admin_route_redirect   = ''
@@ -55,6 +65,7 @@ class ComfortableMexicanSofa::Configuration
     @revisions_limit        = 25
     @locales                = { :en => 'English', :es => 'Español' }
     @admin_locale           = nil
+    @database_config        = nil
   end
   
 end
